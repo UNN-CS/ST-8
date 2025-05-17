@@ -1,0 +1,11 @@
+{
+  "artist": "XXXTentacion",
+  "title": "Skins",
+  "tracks": [
+    "Introduction",
+    "Guardian Angel",
+    "Train Food",
+    "Whoa (Mind in Awe)",
+    "Bad!"
+  ]
+}
