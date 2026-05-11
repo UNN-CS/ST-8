@@ -1,0 +1,6 @@
+Artist: //input[@name='artist']
+Title: //input[@name='title']
+Tracks (общий шаблон): //input[starts-with(@name,'track')]
+Type (Jewel Case): //input[@name='template'][@value='jewel']
+Paper (A4): //input[@name='size'][@value='a4']
+Submit button: //input[@name='submit']
