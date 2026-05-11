@@ -44,12 +44,12 @@ public class App {
         prefs.put("download.directory_upgrade", true);
         prefs.put("plugins.always_open_pdf_externally", true);
         options.setExperimentalOption("prefs", prefs);
-        options.setBinary("C:\\Users\\Otche\\chrome-win64\\chrome.exe");
+        options.setBinary("D:\\chrome-win64\\chrome.exe");
         options.addArguments("--disable-features=InsecureDownloadWarnings");
         options.addArguments("--allow-running-insecure-content");
         options.setAcceptInsecureCerts(true);
 
-        System.setProperty("webdriver.chrome.driver", "C:\\Users\\Otche\\chromedriver-win64\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "D:\\chromedriver-win64\\chromedriver.exe");
         WebDriver driver = new ChromeDriver(options);
         try {
             driver.get("http://www.papercdcase.com/");
@@ -107,6 +107,7 @@ public class App {
         pw.println("Tracks (общий шаблон): " + XPATH_TRACK_BASE);
         pw.println("Type (Jewel Case): " + XPATH_JEWEL);
         pw.println("Paper (A4): " + XPATH_A4);
+        pw.println("Force Save-as: " + XPATH_FORCE_SAVE);
         pw.println("Submit button: " + XPATH_SUBMIT);
         pw.flush();
         pw.close();
