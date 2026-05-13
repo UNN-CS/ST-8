@@ -134,7 +134,7 @@ public class App {
         String pdfUrl = webDriver.getCurrentUrl();
 
         try (InputStream in = URI.create(pdfUrl).toURL().openStream()) {
-            Files.copy(in, Paths.get("result/papercdcase.pdf"));
+            Files.copy(in, Paths.get("result/cd.pdf"));
         }
     }
 }
