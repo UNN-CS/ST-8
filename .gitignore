@@ -1,0 +1,15 @@
+# Maven build output
+my-app/target/
+
+# Maven wrapper
+my-app/.mvn/wrapper/maven-wrapper.jar
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+*.class
+
+# OS files
+.DS_Store
+Thumbs.db
