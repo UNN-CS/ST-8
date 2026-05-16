@@ -1,0 +1,18 @@
+Artist: The Midnight Echo
+Title: Neon Horizons
+Track01: City Lights
+Track02: Digital Dreams
+Track03: Retrograde
+Track04: Sunset Boulevard
+Track05: Electric Soul
+Track06: Midnight Runner
+Track07: Neon Pulse
+Track08: Starlight Frequency
+Track09: Analog Heart
+Track10: Cyber Dawn
+Track11: Velvet Sky
+Track12: Phantom Signal
+Track13: Gravity Wave
+Track14: Lunar Tide
+Track15: Static Memory
+Track16: Final Transmission
