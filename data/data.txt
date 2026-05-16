@@ -1,0 +1,16 @@
+artist=Daft Punk
+title=Discovery
+track=One More Time
+track=Aerodynamic
+track=Digital Love
+track=Harder, Better, Faster, Stronger
+track=Crescendolls
+track=Nightvision
+track=Superheroes
+track=High Life
+track=Something About Us
+track=Voyager
+track=Veridis Quo
+track=Short Circuit
+track=Face to Face
+track=Too Long
