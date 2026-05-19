@@ -10,7 +10,7 @@
     <properties>
         <maven.compiler.release>8</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <selenium.version>4.15.0</selenium.version>
+        <selenium.version>3.141.59</selenium.version>
         <pdfbox.version>2.0.30</pdfbox.version>
         <json.simple.version>1.1.1</json.simple.version>
     </properties>
