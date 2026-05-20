@@ -1,20 +1,14 @@
-The Example Artist
-Example Album Title
-Track 1
-Track 2
-Track 3
-Track 4
-Track 5
-Track 6
-Track 7
-Track 8
-Track 9
-Track 10
-Track 11
-Track 12
-Track 13
-Track 14
-Track 15
-Track 16
-Track 17
-Track 18
+artist=Justice
+title=Cross
+track=Genesis
+track=Let There Be Light
+track=D.A.N.C.E.
+track=Newjack
+track=Phantom
+track=Phantom Pt. II
+track=Valentine
+track=TTHHEE PPAARRTTYY
+track=DVNO
+track=Stress
+track=Waters of Nazareth
+track=One Minute to Midnight
