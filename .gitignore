@@ -1,0 +1,37 @@
+# Maven
+/target/
+
+# IDEs
+*.iml
+.idea/
+.vscode/
+.settings/
+out/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Java
+*.class
+
+# logs and temp
+*.log
+*.tmp
+
+# ChromeDriver and other drivers
+/drivers/
+
+# Maven wrapper and local configs
+.mvn/
+
+# Test results and coverage
+*.exec
+coverage/
+
+# Ignore environment files
+.env
+
+# Keep data and result folders under version control
+# data/
+# result/

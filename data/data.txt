@@ -1,0 +1,14 @@
+artist=Justice
+title=Cross
+track=Genesis
+track=Let There Be Light
+track=D.A.N.C.E.
+track=Newjack
+track=Phantom
+track=Phantom Pt. II
+track=Valentine
+track=TTHHEE PPAARRTTYY
+track=DVNO
+track=Stress
+track=Waters of Nazareth
+track=One Minute to Midnight
