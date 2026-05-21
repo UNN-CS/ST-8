@@ -23,11 +23,12 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class App {
+
     public static void main(String[] args) {
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--ignore-certificate-errors");
-        
+
         Path downloadDir = Paths.get("result").toAbsolutePath();
         try {
             Files.createDirectories(downloadDir);
@@ -39,13 +40,13 @@ public class App {
         prefs.put("download.prompt_for_download", false);
         prefs.put("plugins.always_open_pdf_externally", true);
         options.setExperimentalOption("prefs", prefs);
-        
+
         WebDriver driver = new ChromeDriver(options);
-        
+
         try {
             driver.get("http://www.papercdcase.com/");
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-            
+
             String dataFilePath = "data/data.txt";
             List<String> lines = Files.readAllLines(Paths.get(dataFilePath));
             String artist = "", title = "";
@@ -66,28 +67,32 @@ public class App {
                 System.err.println("Ошибка формата data.txt");
                 return;
             }
-            
+
             WebElement artistField = wait.until(ExpectedConditions.presenceOfElementLocated(By.name("artist")));
             WebElement titleField = driver.findElement(By.name("title"));
             artistField.clear();
             artistField.sendKeys(artist);
             titleField.clear();
             titleField.sendKeys(title);
-            
+
             List<WebElement> trackFields = driver.findElements(By.cssSelector("input[name^='track']"));
             for (int i = 0; i < tracks.size() && i < trackFields.size(); i++) {
                 trackFields.get(i).clear();
                 trackFields.get(i).sendKeys(tracks.get(i));
             }
-            
+
             WebElement a4Radio = driver.findElement(By.xpath("//input[@name='size' and @value='a4']"));
             WebElement jewelCaseRadio = driver.findElement(By.xpath("//input[@name='template' and @value='jewel']"));
-            if (!a4Radio.isSelected()) a4Radio.click();
-            if (!jewelCaseRadio.isSelected()) jewelCaseRadio.click();
-            
+            if (!a4Radio.isSelected()) {
+                a4Radio.click();
+            }
+            if (!jewelCaseRadio.isSelected()) {
+                jewelCaseRadio.click();
+            }
+
             WebElement submitButton = driver.findElement(By.name("submit"));
             submitButton.click();
-            
+
             System.out.println("Ожидание загрузки PDF...");
             Path downloadedFile = waitForDownload(downloadDir, 30);
             if (downloadedFile != null) {
@@ -103,7 +108,7 @@ public class App {
             driver.quit();
         }
     }
-    
+
     private static Path waitForDownload(Path dir, int timeoutSeconds) throws InterruptedException {
         long deadline = System.currentTimeMillis() + timeoutSeconds * 1000L;
         while (System.currentTimeMillis() < deadline) {
