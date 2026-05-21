@@ -1,0 +1,18 @@
+The Seleniums
+Automated Testing Hits
+Setup Webdriver
+Find Element
+Send Keys
+Click Button
+Submit Form
+Wait For Element
+XPath Locator
+CSS Selector
+Implicit Wait
+Explicit Wait
+Page Object Model
+JUnit Assert
+Test Runner
+Integration Test
+Continuous Delivery
+Code Coverage
