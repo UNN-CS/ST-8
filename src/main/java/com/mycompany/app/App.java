@@ -29,7 +29,6 @@ public class App {
             resultDir.mkdirs();
         }
 
-        // Обычные опции, больше не нужно бороться с настройками загрузок Chrome
         ChromeOptions options = new ChromeOptions();
         WebDriver webDriver = new ChromeDriver(options);
 
@@ -47,7 +46,6 @@ public class App {
             System.out.println("Открытие страницы www.papercdcase.com...");
             webDriver.get("http://www.papercdcase.com/");
 
-            // 1. Заполняем форму через Selenium
             webDriver.findElement(By.xpath("//input[@name='artist']")).sendKeys(artist);
             webDriver.findElement(By.xpath("//input[@name='title']")).sendKeys(title);
 
@@ -65,7 +63,6 @@ public class App {
             WebElement a4Radio = webDriver.findElement(By.xpath("//input[@value='a4']"));
             if (!a4Radio.isSelected()) { a4Radio.click(); }
 
-            // 2. ВМЕСТО НАЖАТИЯ КНОПКИ: Генерируем URL напрямую, как сделал студент
             System.out.println("Форма заполнена. Генерируем прямую ссылку на PDF...");
             StringBuilder pdfUrl = new StringBuilder("http://www.papercdcase.com/papercdcase.cgi/papercdcase.pdf?");
             pdfUrl.append("artist=").append(URLEncoder.encode(artist, StandardCharsets.UTF_8.toString()));
@@ -79,7 +76,6 @@ public class App {
 
             System.out.println("Скачиваем PDF средствами Java...");
             
-            // 3. Скачиваем файл через Java (HttpURLConnection)
             File finalFile = new File(resultDir, "cd.pdf");
             URL url = new URL(pdfUrl.toString());
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
