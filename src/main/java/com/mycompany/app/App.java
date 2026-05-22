@@ -28,6 +28,12 @@ public class App
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--ignore-certificate-errors");
         
+        String chromePath = System.getenv("CHROME_PATH");
+        if (chromePath != null && !chromePath.isEmpty()) {
+            options.setBinary(chromePath);
+            System.out.println("Using Chrome binary: " + chromePath);
+        }
+        
         WebDriver driver = new ChromeDriver(options);
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
         
