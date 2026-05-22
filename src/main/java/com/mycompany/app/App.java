@@ -28,7 +28,6 @@ public class App
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--ignore-certificate-errors");
         
-        System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
         WebDriver driver = new ChromeDriver(options);
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
         
