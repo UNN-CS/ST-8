@@ -1,0 +1,5 @@
+target/
+drivers/chromedriver-mac-arm64/
+drivers/chromedriver-mac-x64/
+drivers/chromedriver-linux64/
+drivers/chromedriver.exe
