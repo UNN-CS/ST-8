@@ -82,11 +82,9 @@ public class App {
                 }
             }
 
-            // Выбираем формат А4
             WebElement paperA4 = driver.findElement(By.xpath("//input[@value='a4' or @value='A4']"));
             if (!paperA4.isSelected()) paperA4.click();
 
-            // Выбираем тип Jewel Case
             WebElement typeJewel = driver.findElement(By.xpath("//input[@value='jewel' or @value='JEWEL']"));
             if (!typeJewel.isSelected()) typeJewel.click();
 
