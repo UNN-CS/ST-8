@@ -15,7 +15,7 @@ public class App {
     public static void main(String[] args) {
         String projectPath = System.getProperty("user.dir");
         String downloadPath = projectPath + File.separator + "result";
-        String dataPath = projectPath + File.separator + "data" + File.separator + "README.md";
+        String dataPath = projectPath + File.separator + "data" + File.separator + "data.txt";
 
         new File(downloadPath).mkdirs();
 
@@ -55,7 +55,6 @@ public class App {
                 WebElement jewelRadio = driver.findElement(By.cssSelector("input[value='jewel']"));
                 ((JavascriptExecutor) driver).executeScript("arguments[0].click();", jewelRadio);
             } catch (Exception e) {
-                // Continue silently
             }
 
             try {
@@ -81,7 +80,6 @@ public class App {
             }
 
         } catch (Exception e) {
-            // Silent catch
         } finally {
             driver.quit();
         }
