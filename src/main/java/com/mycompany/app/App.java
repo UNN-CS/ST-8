@@ -7,9 +7,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.time.Duration;
@@ -54,8 +52,6 @@ public class App {
         try {
             driver.get("http://www.papercdcase.com/");
 
-            saveXpathAddress();
-
             DataRecord data = readDataFromFile("data/data.txt");
 
             deleteOldPdfs(RESULT_DIR);
@@ -98,20 +94,6 @@ public class App {
             System.err.println("Ошибка чтения файла: " + e.getMessage());
             return null;
         }
-    }
-
-    private static void saveXpathAddress() throws FileNotFoundException {
-        PrintWriter pw = new PrintWriter("data/xpath_addresses.txt");
-        pw.println("Artist: " + XPATH_ARTIST);
-        pw.println("Title: " + XPATH_TITLE);
-        pw.println("Tracks (общий шаблон): " + XPATH_TRACK_BASE);
-        pw.println("Type (Jewel Case): " + XPATH_JEWEL);
-        pw.println("Paper (A4): " + XPATH_A4);
-        pw.println("Force Save-as: " + XPATH_FORCE_SAVE);
-        pw.println("Submit button: " + XPATH_SUBMIT);
-        pw.flush();
-        pw.close();
-        System.out.println("Файл xpath_addresses.txt записан в папку data.");
     }
 
     private static void fillAndSubmitForm(WebDriver driver, String artist, String album, List<String> tracks) {
