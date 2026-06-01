@@ -1,105 +1,155 @@
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class App {
-    private static final String BASE_URL = "http://www.papercdcase.com";
-    private static final int MAX_TRACKS = 16;
 
-    public static void main(String[] args) throws IOException, InterruptedException {
-        Path projectRoot = Paths.get(".").toAbsolutePath().normalize();
-        Path dataFile = projectRoot.resolve("data").resolve("data.txt");
-        Path resultDir = projectRoot.resolve("result");
-        Path resultPdf = resultDir.resolve("cd.pdf");
+    private static final String SITE_URL = "http://www.papercdcase.com";
+    private static final int TRACK_LIMIT = 17;
 
-        Files.createDirectories(resultDir);
+    public static void main(String[] args) throws IOException {
+        Path root = Paths.get(".").toAbsolutePath().normalize();
+        Path dataPath = root.resolve("data").resolve("data.txt");
+        Path outputDir = root.resolve("result");
+        Path targetPdf = outputDir.resolve("cd.pdf");
 
-        List<String> lines = Files.readAllLines(dataFile).stream()
-                .map(String::trim)
-                .filter(line -> !line.isEmpty())
-                .collect(Collectors.toList());
+        Files.createDirectories(outputDir);
+        Album album = loadAlbum(dataPath);
 
-        if (lines.size() < 2) {
-            throw new IllegalArgumentException("data.txt must contain artist, title and optional tracks");
+        ChromeOptions chromeOptions = buildChromeOptions(outputDir);
+        WebDriver driver = new ChromeDriver(chromeOptions);
+
+        try {
+            driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(45));
+            driver.get(SITE_URL);
+
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+            wait.until(ExpectedConditions.presenceOfElementLocated(By.name("artist")));
+
+            typeInto(driver, "artist", album.artist);
+            typeInto(driver, "title", album.title);
+
+            for (int index = 0; index < album.tracks.size(); index++) {
+                typeInto(driver, "track" + (index + 1), album.tracks.get(index));
+            }
+
+            selectRadio(driver, "size", "a4");
+            selectRadio(driver, "template", "jewel");
+
+            WebElement submitButton = driver.findElement(By.name("submit"));
+            submitButton.submit();
+
+            Path downloaded = awaitPdf(outputDir, driver, Duration.ofSeconds(90));
+            Files.move(downloaded, targetPdf, StandardCopyOption.REPLACE_EXISTING);
+            System.out.println("Cover saved: " + targetPdf);
+        } finally {
+            driver.quit();
+        }
+    }
+
+    private static Album loadAlbum(Path file) throws IOException {
+        List<String> rows = new ArrayList<>();
+
+        try (BufferedReader reader = Files.newBufferedReader(file)) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                line = line.trim();
+                if (!line.isEmpty()) {
+                    rows.add(line);
+                }
+            }
         }
 
-        String artist = lines.get(0);
-        String title = lines.get(1);
-        List<String> tracks = lines.subList(2, Math.min(lines.size(), 2 + MAX_TRACKS));
+        if (rows.size() < 2) {
+            throw new IllegalStateException("data.txt: need artist on line 1 and album title on line 2");
+        }
 
+        String artist = rows.get(0);
+        String title = rows.get(1);
+        int trackCount = Math.min(rows.size() - 2, TRACK_LIMIT);
+        List<String> tracks = rows.subList(2, 2 + trackCount);
+
+        return new Album(artist, title, tracks);
+    }
+
+    private static ChromeOptions buildChromeOptions(Path downloadFolder) {
         Map<String, Object> prefs = new HashMap<>();
-        prefs.put("download.default_directory", resultDir.toString());
+        prefs.put("download.default_directory", downloadFolder.toString());
         prefs.put("download.prompt_for_download", false);
         prefs.put("plugins.always_open_pdf_externally", true);
 
         ChromeOptions options = new ChromeOptions();
         options.setExperimentalOption("prefs", prefs);
         options.addArguments("--ignore-certificate-errors");
-        options.addArguments("--allow-insecure-localhost");
+        options.addArguments("--remote-allow-origins=*");
+        return options;
+    }
 
-        WebDriver webDriver = new ChromeDriver(options);
-        try {
-            webDriver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(60));
-            webDriver.get(BASE_URL);
+    private static void typeInto(WebDriver driver, String fieldName, String text) {
+        WebElement field = driver.findElement(By.name(fieldName));
+        field.clear();
+        field.sendKeys(text);
+    }
 
-            webDriver.findElement(By.name("artist")).sendKeys(artist);
-            webDriver.findElement(By.name("title")).sendKeys(title);
-
-            for (int i = 0; i < tracks.size(); i++) {
-                webDriver.findElement(By.name("track" + (i + 1))).sendKeys(tracks.get(i));
-            }
-
-            webDriver.findElement(By.xpath("//input[@name='size' and @value='a4']")).click();
-            webDriver.findElement(By.xpath("//input[@name='template' and @value='jewel']")).click();
-
-            WebElement btn = webDriver.findElement(By.name("submit"));
-            btn.submit();
-
-            waitForDownload(resultDir, resultPdf);
-            System.out.println("PDF saved to: " + resultPdf);
-        } finally {
-            webDriver.quit();
+    private static void selectRadio(WebDriver driver, String groupName, String value) {
+        String selector = "input[name='" + groupName + "'][value='" + value + "']";
+        WebElement radio = driver.findElement(By.cssSelector(selector));
+        if (!radio.isSelected()) {
+            radio.click();
         }
     }
 
-    private static void waitForDownload(Path downloadDir, Path targetPdf)
-            throws IOException, InterruptedException {
-        Path downloadedPdf = null;
+    private static Path awaitPdf(Path folder, WebDriver driver, Duration timeout) throws IOException {
+        WebDriverWait wait = new WebDriverWait(driver, timeout);
+        wait.pollingEvery(Duration.ofMillis(750));
 
-        for (int attempt = 0; attempt < 60; attempt++) {
-            try (var files = Files.list(downloadDir)) {
-                downloadedPdf = files
-                        .filter(path -> path.toString().endsWith(".pdf"))
-                        .filter(path -> !path.getFileName().toString().endsWith(".crdownload"))
-                        .filter(path -> !path.equals(targetPdf))
+        return wait.until(webDriver -> {
+            try (var stream = Files.list(folder)) {
+                return stream
+                        .filter(path -> {
+                            String name = path.getFileName().toString();
+                            return name.endsWith(".pdf") && !name.endsWith(".crdownload");
+                        })
+                        .filter(path -> {
+                            try {
+                                return Files.size(path) > 0;
+                            } catch (IOException ex) {
+                                return false;
+                            }
+                        })
                         .findFirst()
                         .orElse(null);
+            } catch (IOException ex) {
+                return null;
             }
+        });
+    }
 
-            if (downloadedPdf != null && Files.size(downloadedPdf) > 0) {
-                break;
-            }
+    private static final class Album {
+        private final String artist;
+        private final String title;
+        private final List<String> tracks;
 
-            Thread.sleep(1000);
+        private Album(String artist, String title, List<String> tracks) {
+            this.artist = artist;
+            this.title = title;
+            this.tracks = tracks;
         }
-
-        if (downloadedPdf == null) {
-            throw new IOException("PDF download was not completed");
-        }
-
-        Files.move(downloadedPdf, targetPdf, StandardCopyOption.REPLACE_EXISTING);
     }
 }

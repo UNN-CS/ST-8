@@ -23,3 +23,10 @@ buildNumber.properties
 
 # Logs
 *.log
+
+# Local browser driver (Selenium Manager resolves it automatically)
+drivers/
+
+# Chrome download temp files
+*.tmp
+*.crdownload
