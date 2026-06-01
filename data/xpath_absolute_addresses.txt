@@ -1,7 +1,0 @@
-Artist: /html/body/table[2]/tbody/tr/td[1]/div/form/table/tbody/tr[1]/td[2]/input
-Title: /html/body/table[2]/tbody/tr/td[1]/div/form/table/tbody/tr[2]/td[2]/input
-Tracks (template): /html/body/table[2]/tbody/tr/td[1]/div/form/table/tbody/tr[3]/td[2]/table/tbody/tr/td[i]/table/tbody/tr[j]/td[2]/input (i=1...2; j=1...8)
-Type: /html/body/table[2]/tbody/tr/td[1]/div/form/table/tbody/tr[4]/td[2]
-Paper: /html/body/table[2]/tbody/tr/td[1]/div/form/table/tbody/tr[5]/td[2]
-Font: /html/body/table[2]/tbody/tr/td[1]/div/form/table/tbody/tr[6]/td[2]
-Force Save-as: /html/body/table[2]/tbody/tr/td[1]/div/form/table/tbody/tr[7]/td[2]

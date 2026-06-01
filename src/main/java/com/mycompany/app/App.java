@@ -56,7 +56,7 @@ public class App {
 
             saveXpathAddress();
 
-            DataRecord data = readDataFromFile("data/NBSPLV.txt");
+            DataRecord data = readDataFromFile("data/data.txt");
 
             deleteOldPdfs(RESULT_DIR);
 
