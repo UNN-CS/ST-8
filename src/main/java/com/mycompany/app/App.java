@@ -142,6 +142,7 @@ public class App {
         while (System.currentTimeMillis() - start < timeoutMs) {
             File[] files = new File(dir).listFiles(f ->
                     f.isFile()
+                    && f.getName().toLowerCase().endsWith(".pdf")
                     && !f.getName().endsWith(".crdownload")
                     && !f.getName().endsWith(".tmp")
                     && !f.getName().startsWith(".com.google.Chrome")
